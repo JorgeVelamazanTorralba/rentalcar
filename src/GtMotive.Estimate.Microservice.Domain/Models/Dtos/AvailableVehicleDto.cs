@@ -1,40 +1,35 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System;
 using System.Text.Json.Serialization;
 
 namespace GtMotive.Estimate.Microservice.Domain.Models.Dtos
 {
     /// <summary>
-    /// Vehicle dto.
+    /// Vehicle entity.
     /// </summary>
-    public class VehicleDto
+    public class AvailableVehicleDto
     {
         /// <summary>
         /// Gets or sets vehicle's license plate.
         /// </summary>
-        [JsonPropertyName("licensePlate")]
-        [Required]
+        [JsonPropertyName("LicensePlate")]
         public string LicensePlate { get; set; }
 
         /// <summary>
         /// Gets or sets vehicle's model.
         /// </summary>
-        [JsonPropertyName("model")]
-        [Required]
+        [JsonPropertyName("Model")]
         public string Model { get; set; }
 
         /// <summary>
         /// Gets or sets vehicle's description.
         /// </summary>
-        [JsonPropertyName("description")]
-        [Required]
+        [JsonPropertyName("Description")]
         public string Description { get; set; }
 
         /// <summary>
         /// Gets or sets vehicle's assembly date.
         /// </summary>
-        [JsonPropertyName("assemblyDate")]
-        [Required]
-        [RegularExpression("^(\\d{4}\\/\\d{2}\\/\\d{2})|(\\d{4}-\\d{2}-\\d{2})$", ErrorMessage = "AssemblyDate must match with one of those formats (yyyy/MM/dd or yyyy-MM-dd)")]
-        public string AssemblyDate { get; set; }
+        [JsonPropertyName("AssemblyDate")]
+        public DateTime AssemblyDate { get; set; }
     }
 }

@@ -1,6 +1,8 @@
 ﻿using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Threading.Tasks;
-using GtMotive.Estimate.Microservice.Api.Events;
+using GtMotive.Estimate.Microservice.Api.Requests;
+using GtMotive.Estimate.Microservice.ApplicationCore.UseCases.CreateVehicle;
 using GtMotive.Estimate.Microservice.Domain.Interfaces;
 using GtMotive.Estimate.Microservice.Domain.Models.Dtos;
 using MediatR;
@@ -14,54 +16,46 @@ namespace GtMotive.Estimate.Microservice.Api.Controllers
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public class VehicleController(IAppLogger<VehicleController> logger, IMediator mediatr) : ControllerBase
+    public class VehicleController(IAppLogger<VehicleController> logger, IMediator mediator) : ControllerBase
     {
         [HttpGet("get-available-vehicles")]
-        [ProducesResponseType<IEnumerable<VehicleDto>>(StatusCodes.Status200OK)]
+        [ProducesResponseType<IEnumerable<AvailableVehicleDto>>(StatusCodes.Status200OK)]
         public async Task<IActionResult> GetAvailableVehiclesAsync()
         {
-            logger.LogInformation($"{nameof(GetAvailableVehiclesAsync)} requested");
+            logger.LogDebug($"{nameof(GetAvailableVehiclesAsync)} requested");
 
-            return Ok(await mediatr.Send(new GetAvailableVehiclesQuery()));
+            var presenter = await mediator.Send(new GetAvailableVehiclesRequest());
+            return presenter.ActionResult;
         }
 
         [HttpPost("create")]
-        [ProducesResponseType<VehicleDto>(StatusCodes.Status200OK)]
-        public async Task<ActionResult<VehicleDto>> CreateVehicleAsync([FromBody] VehicleDto vehicle)
+        [ProducesResponseType<CreateVehicleInputOutput>(StatusCodes.Status200OK)]
+        public async Task<IActionResult> CreateVehicleAsync([FromBody][Required] CreateVehicleRequest request)
         {
-            logger.LogInformation($"{nameof(CreateVehicleAsync)} requested.");
+            logger.LogDebug($"{nameof(CreateVehicleAsync)} requested. {request}", request);
 
-            var result = await mediatr.Send(new AddVehicleCommand() { Vehicle = vehicle });
-
-            return result
-                ? Ok(vehicle)
-                : BadRequest("Unable to add vehicle");
+            var presenter = await mediator.Send(request);
+            return presenter.ActionResult;
         }
 
         [HttpPut("rent-vehicle")]
-        [ProducesResponseType<VehicleDto>(StatusCodes.Status200OK)]
-        public async Task<ActionResult<VehicleDto>> RentVehicleAsync([FromBody] RentPurposeDto rentPurpose)
+        [ProducesResponseType<string>(StatusCodes.Status200OK)]
+        public async Task<IActionResult> RentVehicleAsync([FromBody][Required] RentVehicleRequest request)
         {
-            logger.LogInformation($"{nameof(RentVehicleAsync)} requested for LP:{rentPurpose?.LicensePlate} and PIN:{rentPurpose?.CustomerPin}.");
+            logger.LogDebug($"{nameof(RentVehicleAsync)} requested for LP:{request?.LicensePlate} and PIN:{request?.CustomerPin}.");
 
-            var result = await mediatr.Send(new RentVehicleCommand() { LicensePlate = rentPurpose.LicensePlate, CustomerPin = rentPurpose.CustomerPin });
-
-            return result
-                ? Ok($"Vehicle with LP: {rentPurpose.LicensePlate} rented to customer PIN: {rentPurpose?.CustomerPin}.")
-                : BadRequest($"Unable to rent vehicle with LP: {rentPurpose.LicensePlate} to customer PIN: {rentPurpose?.CustomerPin}.");
+            var presenter = await mediator.Send(request);
+            return presenter.ActionResult;
         }
 
-        [HttpPut("release-vehicle/{licensePlate}")]
+        [HttpPut("release-vehicle")]
         [ProducesResponseType<string>(StatusCodes.Status200OK)]
-        public async Task<ActionResult> ReleaseVehicleAsync([FromRoute] string licensePlate)
+        public async Task<IActionResult> ReleaseVehicleAsync([FromBody][Required] ReleaseVehicleRequest request)
         {
-            logger.LogInformation($"{nameof(ReleaseVehicleAsync)} requested for LP:{licensePlate}.");
+            logger.LogDebug($"{nameof(ReleaseVehicleAsync)} requested for LP:{request?.LicensePlate}.");
 
-            var result = await mediatr.Send(new ReleaseVehicleCommand() { LicensePlate = licensePlate });
-
-            return result
-                ? Ok($"Vehicle with LP: {licensePlate} released.")
-                : BadRequest($"Unable to release wehicle with LP: {licensePlate}.");
+            var presenter = await mediator.Send(request);
+            return presenter.ActionResult;
         }
 
         [HttpGet("test")]

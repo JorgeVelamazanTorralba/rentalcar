@@ -1,12 +1,14 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.Text.Json.Serialization;
+using GtMotive.Estimate.Microservice.Api.UseCases;
+using MediatR;
 
-namespace GtMotive.Estimate.Microservice.Domain.Models.Dtos
+namespace GtMotive.Estimate.Microservice.Api.Requests
 {
     /// <summary>
-    /// RentPurpose dto.
+    /// ReleaseRequest.
     /// </summary>
-    public class RentPurposeDto
+    public class ReleaseVehicleRequest : IRequest<IWebApiPresenter>
     {
         /// <summary>
         /// Gets or sets vehicle's license plate.
@@ -14,12 +16,5 @@ namespace GtMotive.Estimate.Microservice.Domain.Models.Dtos
         [JsonPropertyName("licensePlate")]
         [Required]
         public string LicensePlate { get; set; }
-
-        /// <summary>
-        /// Gets or sets customer pin.
-        /// </summary>
-        [JsonPropertyName("customerPin")]
-        [Required]
-        public string CustomerPin { get; set; }
     }
 }

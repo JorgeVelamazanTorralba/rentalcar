@@ -5,4 +5,5 @@
 
 using System.Diagnostics.CodeAnalysis;
 
-[assembly: SuppressMessage("StyleCop.CSharp.SpacingRules", "SA1010:Opening square brackets should be spaced correctly", Justification = "<pendiente>", Scope = "member", Target = "~F:GtMotive.Estimate.Microservice.ApplicationCore.Mappings.ApiMappingsProfile._formats")]
+[assembly: SuppressMessage("Design", "CA1002:No exponer listas genéricas", Justification = "<pendiente>", Scope = "member", Target = "~P:GtMotive.Estimate.Microservice.ApplicationCore.UseCases.GetAvailableVehicles.GetAvailableVehiclesOutput.AvailableVehicles")]
+[assembly: SuppressMessage("Usage", "CA2227:Las propiedades de colección deben ser de solo lectura", Justification = "<pendiente>", Scope = "member", Target = "~P:GtMotive.Estimate.Microservice.ApplicationCore.UseCases.GetAvailableVehicles.GetAvailableVehiclesOutput.AvailableVehicles")]

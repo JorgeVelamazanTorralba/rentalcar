@@ -12,9 +12,9 @@ namespace GtMotive.Estimate.Microservice.InfrastructureTests
         private readonly HttpClient _client = fixture.Server.CreateClient();
 
         [Fact]
-        public async Task CreateVehicleAsyncTest()
+        public async Task RentVehicleAsyncTestSuccess()
         {
-            var response = await _client.GetAsync($"/api/Vehicle/test");
+            var response = await _client.GetAsync("/api/Vehicle/test");
 
             response.Should().NotBeNull();
             response.StatusCode.Should().Be(HttpStatusCode.OK);

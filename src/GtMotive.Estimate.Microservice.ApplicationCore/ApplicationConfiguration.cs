@@ -1,7 +1,10 @@
 ﻿using System;
 using System.Diagnostics.CodeAnalysis;
-using GtMotive.Estimate.Microservice.ApplicationCore.Mappings;
-using GtMotive.Estimate.Microservice.ApplicationCore.Services;
+using GtMotive.Estimate.Microservice.ApplicationCore.Repositories;
+using GtMotive.Estimate.Microservice.ApplicationCore.UseCases.CreateVehicle;
+using GtMotive.Estimate.Microservice.ApplicationCore.UseCases.GetAvailableVehicles;
+using GtMotive.Estimate.Microservice.ApplicationCore.UseCases.ReleaseVehicle;
+using GtMotive.Estimate.Microservice.ApplicationCore.UseCases.RentVehicle;
 using GtMotive.Estimate.Microservice.Domain.Interfaces;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -22,8 +25,11 @@ namespace GtMotive.Estimate.Microservice.ApplicationCore
         /// <returns>The modified instance.</returns>
         public static IServiceCollection AddUseCases(this IServiceCollection services)
         {
-            services.AddAutoMapper(typeof(ApiMappingsProfile));
-            services.AddScoped<IVehicleService, VehicleService>();
+            services.AddScoped<ICreateVehicleUseCase, CreateVehicleUseCase>();
+            services.AddScoped<IGetAvailableVehiclesUseCase, GetAvailableVehiclesUseCase>();
+            services.AddScoped<IReleaseVehicleUseCase, ReleaseVehicleUseCase>();
+            services.AddScoped<IRentVehicleUseCase, RentVehicleUseCase>();
+            services.AddScoped<IVehicleRepository, VehicleRepository>();
 
             return services;
         }
